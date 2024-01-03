@@ -39,6 +39,7 @@ def process(device, model, model_type, image, input_size, target_size, optimize,
             first_execution = False
 
         sample = [np.reshape(image, (1, 3, *input_size))]
+        #print("Değer",model.output(0))
         prediction = model(sample)[model.output(0)][0]
         prediction = cv2.resize(prediction, dsize=target_size,
                                 interpolation=cv2.INTER_CUBIC)
@@ -57,8 +58,9 @@ def process(device, model, model_type, image, input_size, target_size, optimize,
             height, width = sample.shape[2:]
             print(f"    Input resized to {width}x{height} before entering the encoder")
             first_execution = False
-
+        #Calısan Bolge
         prediction = model.forward(sample)
+        print(prediction)
         prediction = (
             torch.nn.functional.interpolate(
                 prediction.unsqueeze(1),
@@ -178,6 +180,7 @@ def run(input_path, output_path, model_path, model_type="dpt_beit_large_512", op
                 if frame is not None:
                     original_image_rgb = np.flip(frame, 2)  # in [0, 255] (flip required to get RGB)
                     image = transform({"image": original_image_rgb/255})["image"]
+                   
 
                     prediction = process(device, model, model_type, image, (net_w, net_h),
                                          original_image_rgb.shape[1::-1], optimize, True)

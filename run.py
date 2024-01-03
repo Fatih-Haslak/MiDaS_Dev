@@ -60,7 +60,7 @@ def process(device, model, model_type, image, input_size, target_size, optimize,
             first_execution = False
         #Calısan Bolge
         prediction = model.forward(sample)
-        print(prediction)
+        print("size",prediction.size())
         prediction = (
             torch.nn.functional.interpolate(
                 prediction.unsqueeze(1),
